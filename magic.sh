@@ -14,7 +14,6 @@ apt install curl build-essential git cmake clang-format python3-pip python-is-py
 pip install virtualenv mypy numpy matplotlib scipy cmake-format
 
 # misc configuration
-gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
 usermod -aG dialout $USER
 echo -e 'set bell-style none' >> ${HOME}/.inputrc
 
@@ -61,8 +60,9 @@ arduino-cli core update-index
 arduino-cli core install esp32:esp32
 
 # reload
-cd ${HOME}
-rm -rf ${HOME}/Downloads/.bootstrap
+cd $HOME
+rm -rf $workdir
 udevadm control --reload-rules && udevadm trigger
 source ${HOME}/.bashrc
 
+echo "All done! Enjoy!"
