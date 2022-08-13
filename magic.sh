@@ -11,7 +11,7 @@ echo "" >> ${HOME}/.bashrc
 apt update
 apt upgrade -y
 apt install curl build-essential git cmake clang-format python3-pip python-is-python3 libusb-1.0-0-dev libncurses5 srecord -y
-pip install virtualenv mypy numpy matplotlib scipy cmake-format
+pip install virtualenv mypy numpy matplotlib scipy cmake-format black
 
 # misc configuration
 usermod -aG dialout $USER
