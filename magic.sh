@@ -49,7 +49,7 @@ tar -xvf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 -C /opt/
 sudo -u $SUDO_USER echo -e 'export PATH=$PATH:/opt/gcc-arm-none-eabi-10.3-2021.10/bin' >> ${USER_HOME}/.bashrc
 
 # install openocd
-apt install libtool pkg-config autoconf automake texinfo libjaylink-0.2 -y
+apt install libtool pkg-config autoconf automake texinfo libjaylink-dev -y
 sudo -u $SUDO_USER git clone https://github.com/openocd-org/openocd.git --recurse-submodules
 cd openocd
 sudo -u $SUDO_USER ./bootstrap
