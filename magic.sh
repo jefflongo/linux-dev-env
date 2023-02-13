@@ -73,6 +73,6 @@ sudo -u $SUDO_USER arduino-cli core install esp32:esp32
 cd $USER_HOME
 sudo -u $SUDO_USER rm -rf $workdir
 udevadm control --reload-rules && udevadm trigger
-sudo -u $SUDO_USER source ${USER_HOME}/.bashrc
+source ${USER_HOME}/.bashrc
 
 sudo -u $SUDO_USER echo "All done! Enjoy!"
