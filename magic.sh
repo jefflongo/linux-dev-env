@@ -18,8 +18,8 @@ usermod -aG dialout $USER
 echo -e 'set bell-style none' >> ${HOME}/.inputrc
 
 # configure git
-git config --global push.autoSetupRemote = true
-git config --global push.default = simple
+git config --global push.autoSetupRemote true
+git config --global push.default simple
 git config --global alias.st status
 git config --global alias.br branch
 git config --global alias.f fetch
