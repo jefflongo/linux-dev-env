@@ -11,7 +11,7 @@ USER_HOME=$(eval echo ~${SUDO_USER})
 
 workdir=${USER_HOME}/Downloads/.bootstrap
 sudo -u $SUDO_USER mkdir -p $workdir
-sudo -u $SUDO_USER cd $workdir
+cd $workdir
 
 sudo -u $SUDO_USER echo "" >> ${USER_HOME}/.bashrc
 
@@ -70,7 +70,7 @@ sudo -u $SUDO_USER arduino-cli core update-index
 sudo -u $SUDO_USER arduino-cli core install esp32:esp32
 
 # reload
-sudo -u $SUDO_USER cd $USER_HOME
+cd $USER_HOME
 sudo -u $SUDO_USER rm -rf $workdir
 udevadm control --reload-rules && udevadm trigger
 sudo -u $SUDO_USER source ${USER_HOME}/.bashrc
