@@ -51,7 +51,7 @@ sudo -u $SUDO_USER echo -e 'export PATH=$PATH:/opt/gcc-arm-none-eabi-10.3-2021.1
 # install openocd
 apt install libtool pkg-config autoconf automake texinfo -y
 sudo -u $SUDO_USER git clone https://github.com/openocd-org/openocd.git --recurse-submodules
-sudo -u $SUDO_USER cd openocd
+cd openocd
 sudo -u $SUDO_USER ./bootstrap
 sudo -u $SUDO_USER ./configure --enable-stlink --enable-esp-usb-jtag --enable-jlink
 sudo -u $SUDO_USER make
