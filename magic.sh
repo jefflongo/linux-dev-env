@@ -18,9 +18,20 @@ sudo -u $SUDO_USER echo "" >> ${USER_HOME}/.bashrc
 # setup GNOME
 if command -v gsettings &> /dev/null
 then
-    gsettings set org.gnome.shell.app-switcher current-workspace-only true
-    gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
+    # Check if the schemas exist
+    if gsettings list-schemas | grep -q "org.gnome.shell.app-switcher"; then
+        gsettings set org.gnome.shell.app-switcher current-workspace-only true
+    else
+        echo "Schema org.gnome.shell.app-switcher does not exist"
+    fi
+
+    if gsettings list-schemas | grep -q "org.gnome.shell.extensions.dash-to-dock"; then
+        gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
+    else
+        echo "Schema org.gnome.shell.extensions.dash-to-dock does not exist"
+    fi
 fi
+
 
 # install general useful things
 apt update
