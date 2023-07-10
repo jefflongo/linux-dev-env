@@ -15,6 +15,13 @@ cd $workdir
 
 sudo -u $SUDO_USER echo "" >> ${USER_HOME}/.bashrc
 
+# setup GNOME
+if command -v gsettings &> /dev/null
+then
+    gsettings set org.gnome.shell.app-switcher current-workspace-only true
+    gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
+fi
+
 # install general useful things
 apt update
 apt upgrade -y
@@ -22,7 +29,7 @@ apt install curl build-essential git cmake clang-format python3-pip python-is-py
 sudo -u $SUDO_USER pip install --user virtualenv mypy numpy matplotlib scipy pyserial pyusb cmake-format black
 
 # misc configuration
-usermod -aG dialout $SUDO_USER
+usermod -aG dialout,plugdev $SUDO_USER
 sudo -u $SUDO_USER echo -e 'set bell-style none' >> ${USER_HOME}/.inputrc
 
 # configure git
@@ -44,9 +51,9 @@ apt update
 apt install code -y
 
 # install arm toolchain
-sudo -u $SUDO_USER wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
-tar -xvf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 -C /opt/
-sudo -u $SUDO_USER echo -e 'export PATH=$PATH:/opt/gcc-arm-none-eabi-10.3-2021.10/bin' >> ${USER_HOME}/.bashrc
+sudo -u $SUDO_USER wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.mpacbti-rel1/binrel/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz
+tar -xvf arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz -C /opt/
+sudo -u $SUDO_USER echo -e 'export PATH=$PATH:/opt/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi/bin' >> ${USER_HOME}/.bashrc
 
 # install openocd
 apt install libtool pkg-config autoconf automake texinfo libjaylink-dev -y
