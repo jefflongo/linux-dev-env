@@ -62,9 +62,9 @@ apt update
 apt install code -y
 
 # install arm toolchain
-sudo -u $SUDO_USER wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.mpacbti-rel1/binrel/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz
-tar -xvf arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi.tar.xz -C /opt/
-sudo -u $SUDO_USER echo -e 'export PATH=$PATH:/opt/arm-gnu-toolchain-12.2.mpacbti-rel1-x86_64-arm-none-eabi/bin' >> ${USER_HOME}/.bashrc
+sudo -u $SUDO_USER wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
+tar -xvf arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C /opt/
+sudo -u $SUDO_USER echo -e 'export PATH=$PATH:/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin' >> ${USER_HOME}/.bashrc
 
 # install openocd
 apt install libtool pkg-config autoconf automake texinfo libjaylink-dev -y
