@@ -30,8 +30,26 @@ then
     else
         echo "Schema org.gnome.shell.extensions.dash-to-dock does not exist"
     fi
+
+    if gsettings list-schemas | grep -q "org.gnome.desktop.interface"; then
+        gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-purple-dark'
+        gsettings set org.gnome.desktop.interface icon-theme 'Yaru-purple-dark'
+    else
+        echo "Schema org.gnome.desktop.interface does not exist"
+    fi
 fi
 
+# configure shell colors
+sed -i '/^#force_color_prompt=yes/s/^#//' ${USER_HOME}/.bashrc
+sed -i '/^if \[ "$color_prompt" = yes \]; then$/i\
+parse_git_branch() {\
+    git branch 2> /dev/null | sed -e "/^[^*]/d" -e "s/* \(.*\)/(\1)/"\
+}\
+
+' ${USER_HOME}/.bashrc
+sed -i '/^if \[ "$color_prompt" = yes \]; then$/!b;n;s/^\([[:space:]]*\)PS1=/\1# PS1=/;a\
+    PS1='\''${debian_chroot:+($debian_chroot)}\\\[\\033[38;2;119;100;216m\\\]\\\[\\033[1m\\\]\\w\\\[\\033[38;2;173;162;231m\\\] $(parse_git_branch)\\\[\\033[0m\\\]\\$ '\''
+' ${USER_HOME}/.bashrc
 
 # install general useful things
 apt update
