@@ -43,10 +43,8 @@ fi
 sed -i '/^#force_color_prompt=yes/s/^#//' ${USER_HOME}/.bashrc
 sed -i '/^if \[ "$color_prompt" = yes \]; then$/i\
 parse_git_branch() {\
-    git branch 2> /dev/null | sed -e "/^[^*]/d" -e "s/* \(.*\)/(\1)/"\
-}\
-
-' ${USER_HOME}/.bashrc
+    git branch 2> /dev/null | sed -e "/^[^*]/d" -e "s/* \\(.*\\)/(\\1)/"\
+}\n' ${USER_HOME}/.bashrc
 sed -i '/^if \[ "$color_prompt" = yes \]; then$/!b;n;s/^\([[:space:]]*\)PS1=/\1# PS1=/;a\
     PS1='\''${debian_chroot:+($debian_chroot)}\\\[\\033[38;2;119;100;216m\\\]\\\[\\033[1m\\\]\\w\\\[\\033[38;2;173;162;231m\\\] $(parse_git_branch)\\\[\\033[0m\\\]\\$ '\''
 ' ${USER_HOME}/.bashrc
