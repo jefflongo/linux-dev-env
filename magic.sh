@@ -69,6 +69,7 @@ configure_udev() {
 configure_git() {
     sudo -u $SUDO_USER git config --global push.autoSetupRemote true
     sudo -u $SUDO_USER git config --global push.default simple
+    sudo -u $SUDO_USER git config --global submodule.recurse true
     sudo -u $SUDO_USER git config --global alias.st status
     sudo -u $SUDO_USER git config --global alias.br branch
     sudo -u $SUDO_USER git config --global alias.f fetch
