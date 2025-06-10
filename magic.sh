@@ -75,7 +75,7 @@ configure_git() {
     sudo -u $SUDO_USER git config --global alias.f fetch
     sudo -u $SUDO_USER git config --global alias.update 'submodule update --init --recursive'
     sudo -u $SUDO_USER git config --global alias.hist 'log --pretty=oneline -n 10'
-    sudo -u $SUDO_USER git config --global alias.oops 'commit --amend'
+    sudo -u $SUDO_USER git config --global alias.oops 'commit --amend --no-edit'
 }
 
 install_code() {
