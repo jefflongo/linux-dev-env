@@ -18,7 +18,7 @@ echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
 # install general useful things
 apt update
 apt upgrade -y
-apt install curl build-essential dbus-x11 git cmake clang-format python3 python3-pip python-is-python3 libusb-1.0-0-dev libncurses5 libncurses5-dev libncursesw5 srecord -y
+apt install curl build-essential dbus-x11 git cmake clang-format python3 python3-pip python-is-python3 libusb-1.0-0-dev libncurses5 libncurses6-dev libncursesw6 srecord -y
 sudo -u $SUDO_USER pip install --user black cmake-format matplotlib mypy numpy pyserial pyusb scipy virtualenv
 
 configure_gnome() {
