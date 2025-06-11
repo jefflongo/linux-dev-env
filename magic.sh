@@ -98,7 +98,7 @@ install_arm_toolchain() {
 }
 
 install_openocd() {
-    apt install libtool pkg-config autoconf automake texinfo libjaylink-dev -y
+    apt install libtool pkg-config autoconf automake texinfo libjaylink-dev libjim -y
     sudo -u $SUDO_USER git clone https://github.com/openocd-org/openocd.git --recurse-submodules
     cd openocd
     sudo -u $SUDO_USER ./bootstrap
