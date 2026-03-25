@@ -13,13 +13,10 @@ workdir=${USER_HOME}/Downloads/.bootstrap
 sudo -u $SUDO_USER mkdir -p $workdir
 cd $workdir
 
-echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
-
 # install general useful things
 apt update
 apt upgrade -y
-apt install curl build-essential dbus-x11 git cmake clang-format python3 python3-pip python-is-python3 libusb-1.0-0-dev libncurses-dev libncursesw6 srecord -y
-sudo -u $SUDO_USER pip install --user black cmake-format matplotlib mypy numpy pyserial pyusb scipy virtualenv
+apt install black build-essential ninja-build curl dbus-x11 git cmake cmake-format clang-format default-jdk python3 python3-pip python3-virtualenv python3-mypy python3-scipy python3-numpy python3-serial python3-usb python3-matplotlib python-is-python3 libusb-1.0-0-dev libncurses-dev libncursesw6 srecord xclip -y
 
 configure_gnome() {
     if command -v gsettings &> /dev/null; then
@@ -49,6 +46,9 @@ configure_gnome() {
 }
 
 configure_shell() {
+    echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
+    echo 'alias copy="xclip -selection clipboard"' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
+    echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
     sed -i '/^#force_color_prompt=yes/s/^#//' ${USER_HOME}/.bashrc
     sed -i '/^if \[ "$color_prompt" = yes \]; then$/i\
 parse_git_branch() {\
@@ -91,10 +91,14 @@ install_code() {
     fi
 }
 
+install_rust() {
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+}
+
 install_arm_toolchain() {
-    sudo -u $SUDO_USER wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
-    tar -xvf arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz -C /opt/
-    echo -e 'export PATH=$PATH:/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
+    sudo -u $SUDO_USER wget https://armkeil.blob.core.windows.net/developer/files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi.tar.xz
+    tar -xvf arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi.tar.xz -C /opt/
+    echo -e 'export PATH=$PATH:/opt/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi/bin' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
 }
 
 install_openocd() {
@@ -109,21 +113,14 @@ install_openocd() {
     cd ..
 }
 
-install_esp32_arduino() {
-    curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
-    sudo -u $SUDO_USER arduino-cli config init --additional-urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-    sudo -u $SUDO_USER arduino-cli core update-index
-    sudo -u $SUDO_USER arduino-cli core install esp32:esp32
-}
-
 configure_gnome
 configure_shell
 configure_udev
 configure_git
 install_code
+install_rust
 install_arm_toolchain
 install_openocd
-install_esp32_arduino
 
 # reload
 cd $USER_HOME
