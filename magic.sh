@@ -16,7 +16,7 @@ cd $workdir
 # install general useful things
 apt update
 apt upgrade -y
-apt install black build-essential ninja-build curl dbus-x11 git cmake cmake-format clang-format default-jdk python3 python3-pip python3-virtualenv python3-mypy python3-scipy python3-numpy python3-serial python3-usb python3-matplotlib python-is-python3 libusb-1.0-0-dev libncurses-dev libncursesw6 srecord xclip -y
+apt install black build-essential clang-format cmake cmake-format curl dbus-x11 default-jdk git libncurses-dev libncursesw6 libusb-1.0-0-dev micro ninja-build python-is-python3 python3 python3-matplotlib python3-mypy python3-numpy python3-pip python3-scipy python3-serial python3-usb python3-virtualenv srecord xclip -y
 
 configure_gnome() {
     if command -v gsettings &> /dev/null; then
@@ -67,15 +67,19 @@ configure_udev() {
 }
 
 configure_git() {
-    sudo -u $SUDO_USER git config --global push.autoSetupRemote true
-    sudo -u $SUDO_USER git config --global push.default simple
-    sudo -u $SUDO_USER git config --global submodule.recurse true
-    sudo -u $SUDO_USER git config --global alias.st status
     sudo -u $SUDO_USER git config --global alias.br branch
     sudo -u $SUDO_USER git config --global alias.f fetch
-    sudo -u $SUDO_USER git config --global alias.update 'submodule update --init --recursive'
     sudo -u $SUDO_USER git config --global alias.hist 'log --pretty=oneline -n 10'
     sudo -u $SUDO_USER git config --global alias.oops 'commit --amend --no-edit'
+    sudo -u $SUDO_USER git config --global alias.st status
+    sudo -u $SUDO_USER git config --global alias.update 'submodule update --init --recursive'
+    sudo -u $SUDO_USER git config --global core.editor "micro"
+    sudo -u $SUDO_USER git config --global pull.rebase true
+    sudo -u $SUDO_USER git config --global push.autoSetupRemote true
+    sudo -u $SUDO_USER git config --global push.default simple
+    sudo -u $SUDO_USER git config --global rebase.autoStash true
+    sudo -u $SUDO_USER git config --global rerere.enabled true
+    sudo -u $SUDO_USER git config --global submodule.recurse true
 }
 
 install_code() {
