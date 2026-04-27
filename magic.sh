@@ -103,9 +103,10 @@ install_rust() {
 }
 
 install_arm_toolchain() {
-    sudo -u $SUDO_USER wget https://armkeil.blob.core.windows.net/developer/files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi.tar.xz
-    tar -xvf arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi.tar.xz -C /opt/
-    echo -e 'export PATH=$PATH:/opt/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-eabi/bin' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
+    local VERSION
+    VERSION=$(sudo -u $SUDO_USER wget -qO- "https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads" | grep -oP '(?<=downloads/gnu/)[^/"]+' | sort -Vu | tail -1)
+    sudo -u $SUDO_USER wget -O- "https://developer.arm.com/-/media/Files/downloads/gnu/${VERSION}/binrel/arm-gnu-toolchain-${VERSION}-x86_64-arm-none-eabi.tar.xz" | tar -xJ -C /opt
+    echo 'export PATH="/opt/arm-gnu-toolchain-'"${VERSION}"'-x86_64-arm-none-eabi/bin:$PATH"' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
 }
 
 install_openocd() {
