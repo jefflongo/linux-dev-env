@@ -16,7 +16,7 @@ cd $workdir
 # install general useful things
 apt update
 apt upgrade -y
-apt install black build-essential clang-format cmake cmake-format curl dbus-x11 default-jdk git libncurses-dev libncursesw6 libusb-1.0-0-dev micro ninja-build python-is-python3 python3 python3-matplotlib python3-mypy python3-numpy python3-pip python3-scipy python3-serial python3-usb python3-virtualenv srecord xclip -y
+apt install bat black build-essential clang-format cmake cmake-format curl dbus-x11 default-jdk git libncurses-dev libncursesw6 libusb-1.0-0-dev micro ninja-build python-is-python3 python3 python3-matplotlib python3-mypy python3-numpy python3-pip python3-scipy python3-serial python3-usb python3-virtualenv srecord xclip -y
 
 configure_gnome() {
     if command -v gsettings &> /dev/null; then
@@ -47,6 +47,9 @@ configure_gnome() {
 
 configure_shell() {
     echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
+    echo 'export EDITOR=micro' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
+    echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
+    echo 'alias bat="batcat -pp"' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
     echo 'alias copy="xclip -selection clipboard"' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
     echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
     sed -i '/^#force_color_prompt=yes/s/^#//' ${USER_HOME}/.bashrc
