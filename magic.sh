@@ -72,7 +72,7 @@ configure_udev() {
 configure_git() {
     sudo -u $SUDO_USER git config --global alias.br branch
     sudo -u $SUDO_USER git config --global alias.f fetch
-    sudo -u $SUDO_USER git config --global alias.hist 'log --pretty=oneline -n 10'
+    sudo -u $SUDO_USER git config --global alias.hist 'log --pretty=oneline --abbrev-commit -n 10'
     sudo -u $SUDO_USER git config --global alias.oops 'commit --amend --no-edit'
     sudo -u $SUDO_USER git config --global alias.st status
     sudo -u $SUDO_USER git config --global alias.update 'submodule update --init --recursive'
