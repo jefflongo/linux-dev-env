@@ -63,6 +63,7 @@ parse_git_branch() {\
     PS1='\''${debian_chroot:+($debian_chroot)}\\\[\\033[38;2;119;100;216m\\\]\\\[\\033[1m\\\]\\w\\\[\\033[38;2;173;162;231m\\\] $(parse_git_branch)\\\[\\033[0m\\\]\\$ '\''
 ' ${USER_HOME}/.bashrc
     echo -e 'set bell-style none' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.inputrc
+    echo '"\C-h": backward-kill-word' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.inputrc
 }
 
 configure_udev() {
