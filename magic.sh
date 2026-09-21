@@ -9,9 +9,9 @@ fi
 
 USER_HOME=$(eval echo ~${SUDO_USER})
 
-workdir=${USER_HOME}/Downloads/.bootstrap
-sudo -u $SUDO_USER mkdir -p $workdir
-cd $workdir
+WORKDIR=$(sudo -u $SUDO_USER mktemp -d)
+trap `rm -rf "$WORKDIR; cd $USER_HOME"` EXIT
+cd $WORKDIR
 
 # install general useful things
 apt update
@@ -19,6 +19,7 @@ apt upgrade -y
 apt install bat black build-essential clang-format cmake cmake-format curl dbus-x11 default-jdk git libncurses-dev libncursesw6 libusb-1.0-0-dev micro ninja-build python-is-python3 python3 python3-matplotlib python3-mypy python3-numpy python3-pip python3-scipy python3-serial python3-usb python3-virtualenv srecord xclip -y
 
 configure_gnome() {
+    echo "Configuring GNOME"
     if command -v gsettings &> /dev/null; then
         if gsettings list-schemas | grep -q "org.gnome.shell.app-switcher"; then
             echo "Configuring app switcher..."
@@ -26,14 +27,14 @@ configure_gnome() {
         else
             echo "Schema org.gnome.shell.app-switcher does not exist"
         fi
-    
+
         if gsettings list-schemas | grep -q "org.gnome.shell.extensions.dash-to-dock"; then
             echo "Configuring dock..."
             sudo -u $SUDO_USER dbus-launch gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
         else
             echo "Schema org.gnome.shell.extensions.dash-to-dock does not exist"
         fi
-    
+
         if gsettings list-schemas | grep -q "org.gnome.desktop.interface"; then
             echo "Configuring UI..."
             sudo -u $SUDO_USER dbus-launch gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
@@ -46,6 +47,7 @@ configure_gnome() {
 }
 
 configure_shell() {
+    echo "Configuring shell"
     echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
     echo 'export EDITOR=micro' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
     echo "" | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
@@ -64,12 +66,14 @@ parse_git_branch() {\
 }
 
 configure_udev() {
+    echo "Configuring udev"
     usermod -aG dialout,plugdev $SUDO_USER
     echo -e 'SUBSYSTEM=="tty", ATTRS{interface}=="Black Magic GDB Server", SYMLINK+="ttyBmpGdb"
     SUBSYSTEM=="tty", ATTRS{interface}=="Black Magic UART Port", SYMLINK+="ttyBmpTarg"' > /etc/udev/rules.d/99-blackmagic.rules
 }
 
 configure_git() {
+    echo "Configuring git"
     sudo -u $SUDO_USER git config --global alias.br branch
     sudo -u $SUDO_USER git config --global alias.f fetch
     sudo -u $SUDO_USER git config --global alias.hist 'log --pretty=oneline --abbrev-commit -n 10'
@@ -86,6 +90,7 @@ configure_git() {
 }
 
 install_code() {
+    echo "Installing VS Code"
     if command -v snap &> /dev/null; then
         snap install --classic code
     else
@@ -99,17 +104,20 @@ install_code() {
 }
 
 install_rust() {
+    echo "Installing Rust"
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 }
 
 install_arm_toolchain() {
     local VERSION
-    VERSION=$(sudo -u $SUDO_USER wget -qO- "https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads" | grep -oP '(?<=downloads/gnu/)[^/"]+' | sort -Vu | tail -1)
-    sudo -u $SUDO_USER wget -O- "https://developer.arm.com/-/media/Files/downloads/gnu/${VERSION}/binrel/arm-gnu-toolchain-${VERSION}-x86_64-arm-none-eabi.tar.xz" | tar -xJ -C /opt
+    echo "Installing ARM toolchain"
+    VERSION=$(sudo -u $SUDO_USER wget -qO- "https://gitlab.arm.com/api/v4/projects/tooling%2Fgnu-toolchains-for-arm/packages?package_type=generic&package_name=gnu-toolchain&per_page=100" | jq -r '.[].version' | sort -Vu | tail -1)
+    sudo -u $SUDO_USER wget -qO- "https://gitlab.arm.com/api/v4/projects/tooling%2Fgnu-toolchains-for-arm/packages/generic/gnu-toolchain/${VERSION}/arm-gnu-toolchain-${VERSION}-x86_64-arm-none-eabi.tar.xz" | tar -xJ -C /opt
     echo 'export PATH="/opt/arm-gnu-toolchain-'"${VERSION}"'-x86_64-arm-none-eabi/bin:$PATH"' | sudo -u $SUDO_USER tee -a ${USER_HOME}/.bashrc
 }
 
 install_openocd() {
+    echo "Installing OpenOCD"
     apt install libtool pkg-config autoconf automake texinfo libjaylink-dev libjim-dev -y
     sudo -u $SUDO_USER git clone https://github.com/openocd-org/openocd.git --recurse-submodules
     cd openocd
@@ -131,8 +139,6 @@ install_arm_toolchain
 install_openocd
 
 # reload
-cd $USER_HOME
-sudo -u $SUDO_USER rm -rf $workdir
 udevadm control --reload-rules && udevadm trigger
 source ${USER_HOME}/.bashrc
 
