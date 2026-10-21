@@ -15,9 +15,9 @@ pushd $WORKDIR > /dev/null
 sudo apt update -q
 sudo apt upgrade -qy
 sudo apt install bat black build-essential clang-format cmake cmake-format curl default-jdk git \
-     libncurses-dev libncursesw6 libusb-1.0-0-dev micro ninja-build python-is-python3 python3 \
-     python3-matplotlib python3-mypy python3-numpy python3-pip python3-scipy python3-serial \
-     python3-usb srecord wl-clipboard -y
+     libncurses-dev libncursesw6 libusb-1.0-0-dev micro ninja-build openocd python-is-python3 \
+     python3 python3-matplotlib python3-mypy python3-numpy python3-pip python3-scipy \
+     python3-serial python3-usb srecord wl-clipboard -y
 
 configure_gnome() {
     echo "Configuring GNOME"
@@ -122,19 +122,6 @@ install_arm_toolchain() {
     echo 'export PATH="/opt/arm-gnu-toolchain-'"${VERSION}"'-x86_64-arm-none-eabi/bin:$PATH"' >> $HOME/.bashrc
 }
 
-install_openocd() {
-    echo "Installing OpenOCD"
-    sudo apt install libtool pkg-config autoconf automake texinfo libjaylink-dev libjim-dev -y
-    git clone https://github.com/openocd-org/openocd.git --recurse-submodules
-    pushd openocd > /dev/null
-    ./bootstrap
-    ./configure --enable-stlink --enable-esp-usb-jtag --enable-jlink
-    make
-    sudo make install
-    sudo cp contrib/60-openocd.rules /etc/udev/rules.d/
-    popd > /dev/null
-}
-
 configure_gnome
 configure_shell
 configure_udev
@@ -142,10 +129,10 @@ configure_git
 install_code
 install_rust
 install_arm_toolchain
-install_openocd
 
 # reload
-sudo udevadm control --reload-rules && udevadm trigger
+sudo udevadm control --reload-rules
+sudo udevadm trigger
 source $HOME/.bashrc
 
 echo "All done! Enjoy!"
