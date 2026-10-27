@@ -29,6 +29,13 @@ configure_gnome() {
             echo "Schema org.gnome.shell.app-switcher does not exist"
         fi
 
+        if gsettings list-schemas | grep -q "org.gnome.mutter"; then
+            echo "Configuring window manager..."
+            gsettings set workspaces-only-on-primary false
+        else
+            echo "Schema org.gnome.mutter does not exist"
+        fi
+
         if gsettings list-schemas | grep -q "org.gnome.shell.extensions.dash-to-dock"; then
             echo "Configuring dock..."
             gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
